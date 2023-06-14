@@ -8,6 +8,13 @@ from sdk import utils
 
 class WalletsErrorResponseErrorCode(str, Enum):
     VALIDATION = 'VALIDATION'
+    INTERNAL_ERROR = 'INTERNAL_ERROR'
+
+    def __new__(cls, value):
+        if isinstance(value, str):
+            value = value.upper()
+
+        return super().__new__(cls, value)
 
 
 @dataclass_json(undefined=Undefined.EXCLUDE)
