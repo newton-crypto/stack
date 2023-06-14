@@ -14,6 +14,12 @@ class MigrationInfoState(str, Enum):
     TO_DO = 'to do'
     DONE = 'done'
 
+    def __new__(cls, value):
+        if isinstance(value, str):
+            value = value.lower()
+
+        return super().__new__(cls, value)
+
 
 @dataclass_json(undefined=Undefined.EXCLUDE)
 @dataclasses.dataclass
