@@ -31,7 +31,7 @@ setuptools.setup(
         "six>=1.16.0",
         "typing-inspect>=0.8.0",
         "typing_extensions>=4.3.0",
-        "urllib3>=1.26.12",
+        "urllib3>=1.26.7",
         "pylint>=2.16.2",
     ],
     package_dir={'': 'src'},
