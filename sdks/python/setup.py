@@ -26,7 +26,7 @@ setuptools.setup(
         "mypy-extensions>=0.4.3",
         "packaging>=21.3",
         "pyparsing>=3.0.9",
-        "python-dateutil>=2.8.2",
+        "python-dateutil>=2.8.1",
         "requests>=2.28.1",
         "six>=1.16.0",
         "typing-inspect>=0.8.0",
