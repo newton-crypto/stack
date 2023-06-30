@@ -40,7 +40,8 @@ req = shared.StripeTransferRequest(
     asset='USD',
     destination='acct_1Gqj58KZcSIg2N2q',
     metadata={
-        "omnis": 'voluptate',
+        "non": 'eligendi',
+        "sint": 'aliquid',
     },
 )
 
@@ -99,8 +100,8 @@ s = sdk.SDK(
 )
 
 req = operations.GetConnectorTaskRequest(
-    connector=shared.Connector.STRIPE,
-    task_id='doloremque',
+    connector=shared.Connector.MANGOPAY,
+    task_id='sint',
 )
 
 res = s.payments.get_connector_task(req)
@@ -126,7 +127,7 @@ s = sdk.SDK(
 )
 
 req = operations.GetPaymentRequest(
-    payment_id='reprehenderit',
+    payment_id='officia',
 )
 
 res = s.payments.get_payment(req)
@@ -157,7 +158,7 @@ req = operations.InstallConnectorRequest(
         file_generation_period='60s',
         file_polling_period='60s',
     ),
-    connector=shared.Connector.BANKING_CIRCLE,
+    connector=shared.Connector.MANGOPAY,
 )
 
 res = s.payments.install_connector(req)
@@ -229,9 +230,9 @@ s = sdk.SDK(
 )
 
 req = operations.ListConnectorTasksRequest(
-    connector=shared.Connector.STRIPE,
+    connector=shared.Connector.MANGOPAY,
     cursor='aHR0cHM6Ly9nLnBhZ2UvTmVrby1SYW1lbj9zaGFyZQ==',
-    page_size=359444,
+    page_size=680056,
 )
 
 res = s.payments.list_connector_tasks(req)
@@ -257,7 +258,7 @@ s = sdk.SDK(
 )
 
 req = operations.ListConnectorsTransfersRequest(
-    connector=shared.Connector.DUMMY_PAY,
+    connector=shared.Connector.MODULR,
 )
 
 res = s.payments.list_connectors_transfers(req)
@@ -284,9 +285,12 @@ s = sdk.SDK(
 
 req = operations.ListPaymentsRequest(
     cursor='aHR0cHM6Ly9nLnBhZ2UvTmVrby1SYW1lbj9zaGFyZQ==',
-    page_size=480894,
+    page_size=449198,
     sort=[
-        'harum',
+        'maiores',
+        'rerum',
+        'dicta',
+        'magnam',
     ],
 )
 
@@ -337,12 +341,12 @@ s = sdk.SDK(
 
 req = operations.PaymentslistAccountsRequest(
     cursor='aHR0cHM6Ly9nLnBhZ2UvTmVrby1SYW1lbj9zaGFyZQ==',
-    page_size=317983,
+    page_size=767024,
     sort=[
-        'commodi',
-        'repudiandae',
-        'quae',
-        'ipsum',
+        'ea',
+        'aliquid',
+        'laborum',
+        'accusamus',
     ],
 )
 
@@ -369,7 +373,7 @@ s = sdk.SDK(
 )
 
 req = operations.ReadConnectorConfigRequest(
-    connector=shared.Connector.CURRENCY_CLOUD,
+    connector=shared.Connector.DUMMY_PAY,
 )
 
 res = s.payments.read_connector_config(req)
@@ -397,7 +401,7 @@ s = sdk.SDK(
 )
 
 req = operations.ResetConnectorRequest(
-    connector=shared.Connector.MODULR,
+    connector=shared.Connector.CURRENCY_CLOUD,
 )
 
 res = s.payments.reset_connector(req)
@@ -423,7 +427,7 @@ s = sdk.SDK(
 )
 
 req = operations.UninstallConnectorRequest(
-    connector=shared.Connector.MODULR,
+    connector=shared.Connector.WISE,
 )
 
 res = s.payments.uninstall_connector(req)
@@ -450,9 +454,9 @@ s = sdk.SDK(
 
 req = operations.UpdateMetadataRequest(
     payment_metadata=shared.PaymentMetadata(
-        key='pariatur',
+        key='accusamus',
     ),
-    payment_id='modi',
+    payment_id='delectus',
 )
 
 res = s.payments.update_metadata(req)

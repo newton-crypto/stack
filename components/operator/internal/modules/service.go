@@ -252,6 +252,11 @@ type Context struct {
 	Versions      *stackv1beta3.Versions
 }
 
+type PostInstallContext struct {
+	Context
+	ModuleName string
+}
+
 type ConfigHandles map[string]ConfigHandle
 
 func (h ConfigHandles) sort() []string {
@@ -292,7 +297,7 @@ type Service struct {
 	InjectPostgresVariables bool
 	HasVersionEndpoint      bool
 	Liveness                Liveness
-	AuthConfiguration       func(resolveContext PrepareContext) stackv1beta3.ClientConfiguration
+	AuthConfiguration       func(resolveContext ModuleContext) stackv1beta3.ClientConfiguration
 	Configs                 func(resolveContext ServiceInstallContext) Configs
 	Secrets                 func(resolveContext ServiceInstallContext) Secrets
 	Container               func(resolveContext ContainerResolutionContext) Container
@@ -303,7 +308,7 @@ type Service struct {
 	EnvPrefix string
 }
 
-func (service *Service) Prepare(ctx PrepareContext, serviceName string) {
+func (service *Service) Prepare(ctx ModuleContext, serviceName string) {
 	if service.AuthConfiguration != nil {
 		_ = ctx.Stack.GetOrCreateClient(serviceName, service.AuthConfiguration(ctx))
 	}
@@ -312,6 +317,16 @@ func (service *Service) Prepare(ctx PrepareContext, serviceName string) {
 		if service.usedPort == 0 {
 			service.usedPort = ctx.PortAllocator.NextPort()
 		}
+
+		if ctx.Stack.Status.Ports == nil {
+			ctx.Stack.Status.Ports = make(map[string]map[string]int32)
+		}
+
+		if ctx.Stack.Status.Ports[ctx.Module] == nil {
+			ctx.Stack.Status.Ports[ctx.Module] = make(map[string]int32)
+		}
+
+		ctx.Stack.Status.Ports[ctx.Module][serviceName] = service.usedPort
 	}
 
 	if ctx.Configuration.Spec.Broker.Nats != nil && service.NeedTopic {
@@ -338,7 +353,7 @@ func (service *Service) Prepare(ctx PrepareContext, serviceName string) {
 		} else {
 			_, err = js.UpdateStream(&streamConfig)
 			if err != nil {
-				logging.Error(err)
+				logging.Error(fmt.Sprintf("%s: %s", topicName, err))
 			}
 		}
 	}
@@ -452,7 +467,7 @@ func (service Service) containers(ctx ContainerResolutionContext, container Cont
 	}
 }
 
-func (service Service) Install(ctx ServiceInstallContext, deployer *ResourceDeployer, serviceName string) error {
+func (service Service) install(ctx ServiceInstallContext, deployer *ResourceDeployer, serviceName string) error {
 	configHandles, err := service.installConfigs(ctx, deployer, serviceName)
 	if err != nil {
 		return err
@@ -525,6 +540,7 @@ func (service Service) createContainer(ctx ContainerResolutionContext, container
 			// as the gateway is a component like another
 			Env(fmt.Sprintf("%sSTACK_URL", service.EnvPrefix), ctx.Stack.URL()),
 			Env(fmt.Sprintf("%sOTEL_SERVICE_NAME", service.EnvPrefix), serviceName),
+			Env("STACK", ctx.Stack.Name),
 		)
 	}
 
